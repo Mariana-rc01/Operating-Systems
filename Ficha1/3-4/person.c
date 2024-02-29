@@ -4,19 +4,19 @@
 #include <string.h>
 
 struct pessoa {
-    char* nome;
+    char nome[30];
     int idade;
 };
 
 PESSOA create(char* nome, int idade){
     PESSOA p = malloc(sizeof(struct pessoa));
-    p->nome = strdup(nome);
+    strcpy(p->nome, nome);
     p->idade = idade;
     return p;
 }
 
 void set_nome(PESSOA p, char* nome) {
-    p->nome = strdup(nome);
+    strcpy(p->nome, nome);
 }
 
 void set_idade(PESSOA p, int i) {
@@ -24,7 +24,7 @@ void set_idade(PESSOA p, int i) {
 }
 
 char* get_nome(PESSOA p){
-    return strdup(p->nome);
+    return p->nome;
 }
 
 int get_idade(PESSOA p){

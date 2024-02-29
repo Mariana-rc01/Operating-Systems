@@ -1,50 +1,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "person.h"
+#include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
 
-// Função para listar as N primeiras pessoas do arquivo binário
-void listar_pessoas(int N) {
-    FILE *arquivo = fopen("pessoas.bin", "rb");
-    if (arquivo == NULL) {
-        perror("Erro ao abrir o arquivo");
-        return;
-    }
-
-    PESSOA pessoa;
-    int contador = 0;
-    while (fread(&pessoa, sizeof(PESSOA), 1, arquivo) == 1 && contador < N) {
-        printf("Nome: %s, Idade: %d\n", get_nome(pessoa), get_idade(pessoa));
-        contador++;
-    }
-
-    fclose(arquivo);
-}
+typedef struct pessoa {
+    char nome[30];
+    int idade;
+} Pessoa;
 
 int main(int argc, char* argv[]){
 
-    FILE* arquivo = fopen("registos.bin","wb");
-    if (arquivo == NULL){
-        perror("Erro ao abrir o ficheiro binário\n");
-        return 1;
-    }
-
-    PESSOA pessoas[4] = {
-        create("Mariana",22),
-        create("Hugo",21),
-        create("Margarida",0),
-        create("Maria",0)
-    };
-
-    for (int i = 0; i < 4; i++){
-        if (fwrite(&pessoas[i], sizeof(PESSOA),1,arquivo) != 1) {
-            perror("Erro ao escrever no ficheiro\n");
-            fclose(arquivo);
-            return 1;
-        }
-    }
-
-    if (argc < 3) {
+    if (argc < 3 || argc > 4) {
         printf("Usage:\n");
         printf("Add new person: ./pessoas -i [name] [age]\n");
         printf("List N persons: ./pessoas -l [N]\n");
@@ -54,21 +22,56 @@ int main(int argc, char* argv[]){
     }
 
     if (strcmp(argv[1],"-i") == 0){
+        int file = open("registos.bin", O_CREAT | O_APPEND | O_RDWR, 0640);
         int idade = atoi(argv[3]);
-        PESSOA pessoaA = create(strdup(argv[2]),idade);
-        fwrite(&pessoaA, sizeof(PESSOA),1,arquivo);
+        Pessoa pessoa;
+        strcpy(pessoa.nome, argv[2]);
+        pessoa.idade = idade;
+        
+        int bytes = write(file,&pessoa,sizeof(Pessoa));
+
+        if (bytes < 0){
+            perror("Error on write");
+            return 1;
+        }
+
+        // Exercício 4
+        printf("Registo efetuado na posição %ld\n", lseek(file, 0, SEEK_END) / sizeof(Pessoa));
     }
 
     if (strcmp(argv[1],"-l") == 0){
-        listar_pessoas(10);
+        int file = open("registos.bin", O_RDONLY);
+        Pessoa pessoa;
+        while (read(file, &pessoa, sizeof(Pessoa)) > 0){
+            printf("Nome: %s; Idade: %d\n",pessoa.nome, pessoa.idade);
+        }
     }
 
     if (strcmp(argv[1],"-u") == 0){
-        // TO DO
+        int file = open("registos.bin", O_CREAT | O_RDWR, 0640);
+        Pessoa pessoa;
+        while (read(file, &pessoa,sizeof(Pessoa)) > 0){
+            if (strcmp(pessoa.nome, argv[2]) == 0){
+                pessoa.idade = atoi(argv[3]);
+                lseek(file, -sizeof(Pessoa),SEEK_CUR);
+                write(file, &pessoa, sizeof(Pessoa));
+            }
+        }
     }
 
     if (strcmp(argv[1],"-o") == 0){
-        // TO DO
+        int file = open("registos.bin", O_CREAT | O_RDWR, 0640);
+    
+        Pessoa pessoa;
+
+        lseek(file, (atoi(argv[2])-1)*sizeof(Pessoa),SEEK_SET);
+
+        read(file, &pessoa, sizeof(Pessoa));
+        pessoa.idade = atoi(argv[3]);
+
+        lseek(file, -sizeof(Pessoa), SEEK_CUR);
+        write(file, &pessoa, sizeof(Pessoa));
+
     }
 
     return 0;
