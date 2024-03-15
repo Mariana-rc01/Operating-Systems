@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <time.h>
+#include <linux/time.h>
 
 
 int main (int agrc, char const *argv[]){
@@ -25,4 +25,30 @@ int main (int agrc, char const *argv[]){
     time = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("Demorou %f segundos a copiar o ficheiro\n", time);
     return 0;
+}
+
+// Versão do professor:
+ssize_t mycp(char const* from_path, char const* to_path, int buffer_size){
+    int from_fd = open(from_path, O_RDONLY);
+
+    int to_fd = open(to_path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+
+    char* buffer = malloc(sizeof(char)*buffer_size);
+
+    ssize_t write_bytes = 0;
+    ssize_t read_bytes = 0;
+    ssize_t bytes = 0;
+    int nsyscalls = 0;
+
+    while((bytes = read(from_fd, &buffer, buffer_size)) > 0){
+        read_bytes += bytes;
+        write_bytes += write(to_fd, buffer, bytes);
+        nsyscalls += 2;
+    }
+
+    free(buffer);
+
+    if((write_bytes - read_bytes) == 0) return 0;
+
+    return -1;
 }

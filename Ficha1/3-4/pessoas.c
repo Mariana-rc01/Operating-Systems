@@ -12,7 +12,7 @@ typedef struct pessoa {
 
 int main(int argc, char* argv[]){
 
-    if (argc < 3 || argc > 4) {
+    if (argc < 3 || argc > 4){
         printf("Usage:\n");
         printf("Add new person: ./pessoas -i [name] [age]\n");
         printf("List N persons: ./pessoas -l [N]\n");
