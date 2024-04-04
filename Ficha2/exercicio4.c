@@ -9,7 +9,6 @@ int main(){
     int i = 0;
     pid_t child_pid;
     pid_t wait_pid;
-    int statuss[10] = {0};
 
     printf("pid do pai: %d\n", getpid());
     printf("parent pid do pai: %d\n", getppid()); //parent pid
@@ -25,12 +24,8 @@ int main(){
 
     for (i = 0; i < 10; i++){
         wait_pid = wait(&status);
-        statuss[i] = WEXITSTATUS(status);
-    }
-
-    for (i = 0; i < 10; i++){
         if (WIFEXITED(status)){
-            printf("Código de saída: %d\n", statuss[i]);
+            printf("Código de saída: %d\n", WEXITSTATUS(status));
         }
         else {
             printf("Não esperou pelo filho\n");
