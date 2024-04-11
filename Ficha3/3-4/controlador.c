@@ -2,13 +2,26 @@
 #include "mysystem.h"
 
 void controller(int N, char** commands) {
+	int child_pid, acc = 0;
 	for (int i = 0; i < N; i++){
-		int return_value = mysystem(commands[i]);
-		_exit(return_value);
+		if ((child_pid = fork()) == 0){
+			int return_value = 1, acc = 0;
+			while (return_value != 0){
+				return_value = mysystem(commands[i]);
+				acc++;
+			}
+			_exit(acc);
+		}
 	}
 
-	
 
+	for (int i = 0; i < N; i++){
+		int status;
+		wait(&status);
+		if (WIFEXITED(status)){
+			printf("Número: %d\n", WEXITSTATUS(status));
+		}
+	}
 }
 
 int main(int argc, char* argv[]) {
