@@ -1,0 +1,1 @@
+Por norma dámos close ao processo_filho em leitura e ao processo_pai em escrita ou vice-versa, dependendo da direçao que queremos.
