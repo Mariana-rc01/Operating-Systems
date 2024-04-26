@@ -23,7 +23,7 @@ int main (int argc, char * argv[]){
 	init_vector();
 	print_vector();
 
-	if (mkfifo(SERVER, 0644) < 0){
+	if (mkfifo(SERVER, 0666) < 0){
         perror("mkfifo");
     }
 
@@ -36,14 +36,14 @@ int main (int argc, char * argv[]){
         
 		char* client = concat1("fifo_",msg.pid);
 		
-		if (mkfifo(client, 0644) < 0){
+		if (mkfifo(client, 0666) < 0){
         	perror("mkfifo");
     	}
 
-		printf("%d\n",msg.pid);
-		printf("%d\n",msg.needle);
-
-		int fifo_c = open(client, O_WRONLY);
+		int fifo_c;
+		if ((fifo_c = open(client, O_WRONLY)) == -1){
+			perror("Ficheiro não está aberto\n");
+		}
 		msg.occurrences = count_needle(msg.needle);
 		printf("%d\n",msg.occurrences);
 		write(fifo_c, &msg, sizeof(Msg));

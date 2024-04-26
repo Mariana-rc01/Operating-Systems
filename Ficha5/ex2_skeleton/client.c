@@ -36,12 +36,16 @@ int main (int argc, char* argv[]){
 
 	char* nome = concat1("fifo_",getpid());
 	
-	if (mkfifo(nome, 0644) < 0){
-        perror("mkfifo");
+	if (mkfifo(nome, 0666) < 0){
+        perror("mkfifo client");
+		return -1;
     }
 
 	int fifo_server = open(SERVER,O_WRONLY);
-	write(fifo_server,&msg, sizeof(Msg));
+	if(write(fifo_server,&msg, sizeof(Msg)) == -1){
+		perror("write");
+		return -1;
+	}
 	close(fifo_server);
 
 	int fifo_c = open(nome, O_RDONLY);
