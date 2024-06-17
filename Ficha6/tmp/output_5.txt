@@ -1,0 +1,22 @@
+total 308
+-rwxrwxr-x 1 mariana mariana 16344 abr 26 14:56 a.out
+-rw-r--r-- 1 mariana mariana     0 abr 19 15:17 erros.txt
+-rwxrwxr-x 1 mariana mariana 16344 abr 26 14:17 ex
+-rwxrwxr-x 1 mariana mariana 16168 abr 19 15:17 ex1
+-rw-rw-r-- 1 mariana mariana   914 abr 19 15:25 ex1.c
+-rw-rw-r-- 1 mariana mariana  1156 abr 19 15:24 ex2.c
+-rw-rw-r-- 1 mariana mariana  1013 abr 19 15:24 ex3.c
+-rwxrwxr-x 1 mariana mariana 16384 abr 26 14:27 ex4
+-rw-rw-r-- 1 mariana mariana   710 abr 26 14:29 ex4.c
+-rwxrwxr-x 1 mariana mariana 16344 abr 26 14:58 ex5
+-rw-rw-r-- 1 mariana mariana   745 abr 26 14:58 ex5.c
+-rwxrwxr-x 1 mariana mariana 16432 abr 28 09:31 ex6
+-rw-rw-r-- 1 mariana mariana  2088 abr 26 15:49 ex6.c
+-rw-r--r-- 1 mariana mariana  2055 abr 26 15:48 ex6_skeleton.c
+-rwxrwxr-x 1 mariana mariana 16808 abr 29 13:07 ex7
+-rw-rw-r-- 1 mariana mariana  5733 abr 29 13:07 ex7.c
+-rw-rw-r-- 1 mariana mariana 82737 abr 19 14:07 G06-slides-dups.pdf
+-rw-rw-r-- 1 mariana mariana 54048 abr 19 14:07 guiao-06.pdf
+-rw-rw-r-- 1 mariana mariana     3 abr 29 12:43 output_100.txt
+-rw-r--r-- 1 mariana mariana     3 abr 19 15:17 saida.txt
+drwxrwxr-x 2 mariana mariana  4096 abr 29 12:48 tmp
